@@ -14,7 +14,15 @@ func main() {
 var tmpl = template.Must(template.ParseGlob("html/*.html"))
 
 func htmlHandler(w http.ResponseWriter, r *http.Request) {
-  err := tmpl.ExecuteTemplate(w, "welcome.html", nil)
+	q := r.URL.Query()
+	data := struct {
+		Name string 
+		Age string
+	}{
+		Name : q.Get("name"),
+		Age : q.Get("age"),
+	}
+  err := tmpl.ExecuteTemplate(w, "welcome.html", data)
 
 	if err != nil {
 		log.Println(err)
