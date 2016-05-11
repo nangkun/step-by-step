@@ -13,17 +13,34 @@ func main() {
 
 var tmpl = template.Must(template.ParseGlob("html/*.html"))
 
-
 func htmlHandler(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
+	
+	var paramName string = q.Get("name")
+	var paramAge string = q.Get("age")
+	var htmlTemplate string
+	
+	if paramName == "" && paramAge == ""{
+		htmlTemplate = "welcome_noparam.html"
+	} else if paramName != "" && paramAge == "" {
+		htmlTemplate = "welcome_name.html"
+	} else if paramName == "" && paramAge != "" {
+		htmlTemplate = "welcome_age.html"
+	} else if paramName != "" && paramAge != "" {
+		htmlTemplate = "welcome.html"
+	}
+	
+	
 	data := struct {
 		Name string 
 		Age string
 	}{
-		Name : q.Get("name"),
-		Age : q.Get("age"),
+		Name : paramName,
+		Age : paramAge,
 	}
-  err := tmpl.ExecuteTemplate(w, "welcome.html", data)
+  
+	
+	err := tmpl.ExecuteTemplate(w, htmlTemplate, data)
 
 	if err != nil {
 		log.Println(err)
