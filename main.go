@@ -13,6 +13,7 @@ func main() {
 
 var tmpl = template.Must(template.ParseGlob("html/*.html"))
 
+
 func htmlHandler(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	data := struct {
